@@ -14,7 +14,6 @@ namespace DndFighterSim
             Console.ReadKey();      
             Console.WriteLine("Full Name:");
             Console.ReadLine();
-            Console.WriteLine("Press any Key to Continue:");
             Console.ReadKey();
             Console.WriteLine("Campaign:");
             Console.ReadLine();
