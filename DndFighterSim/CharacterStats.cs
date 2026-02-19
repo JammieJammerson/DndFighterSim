@@ -2,46 +2,46 @@
 
 public class DungeonsandDragons
 {
-    public Artificer()
+    public abstract Artificer()
     {
     }
-    public Barbarian()
+    public abstract Barbarian()
 	{
 	}
-    public Bard()
+    public abstract Bard()
     {
     }
-    public Barbarian()
+    public abstract Barbarian()
     {
     }
-    public Cleric()
+    public abstract Cleric()
     {
     }
-    public Druid()
+    public abstract Druid()
     {
     }
-    public Fighter()
+    public abstract Fighter()
     {
     }
-    public Monk()
+    public abstract Monk()
     {
     }
-    public Paladin()
+    public abstract Paladin()
     {
     }
-    public Ranger()
+    public abstract Ranger()
     {
     }
-    public Rogue()
+    public abstract Rogue()
     {
     }
-    public Sorcerer()
+    public abstract Sorcerer()
     {
     }
-    public Warlock()
+    public abstract Warlock()
     {
     }
-    public Wizard()
+    public abstract Wizard()
     {
     }
 }
