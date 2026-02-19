@@ -10,40 +10,37 @@ namespace DndFighterSim
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter your Full Name and the Campaign:");
+            Console.WriteLine("Enter your Name and the Campaign:");
             Console.ReadKey();      
             Console.WriteLine("Full Name:");
             Console.ReadLine();
-            Console.ReadKey();
             Console.WriteLine("Campaign:");
             Console.ReadLine();
-            Console.ReadKey();
             Console.WriteLine("Give Me The Characters and Inititives:");
-            Console.ReadLine();
-            Console.ReadKey();
+
+            // Read total expected
             Console.WriteLine("Give the amount of players and the enemies combined:");
-            string fightersInput = Console.ReadLine();
-            double NumberofEnemies = 0;
-            double NumberofFighters;
-            while (!double.TryParse(fightersInput, out NumberofFighters))
+            string totalInput = Console.ReadLine();
+            int totalExpected;
+            while (!int.TryParse(totalInput, out totalExpected) || totalExpected < 1)
             {
-                Console.WriteLine("Invalid input. Please enter a numeric value for the amount of players and enemies combined:");
-                fightersInput = Console.ReadLine();
+                Console.WriteLine("Invalid input. Please enter a positive integer for the amount of players and enemies combined:");
+                totalInput = Console.ReadLine();
             }
-            Console.WriteLine($"Number of fighters: {NumberofFighters}");
-            Console.ReadKey();
-            Console.WriteLine("");
-            NumberofFighters = 0;
-             while (NumberofFighters < 1)
+
+            // Read number of fighters (players)
+            int NumberofFighters = 0;
+            while (NumberofFighters < 1)
             {
                 Console.WriteLine("Please enter a valid number of fighters (at least 1):");
-                fightersInput = Console.ReadLine();
-                while (!double.TryParse(fightersInput, out NumberofFighters) || NumberofFighters < 1)
+                string fightersInput = Console.ReadLine();
+                while (!int.TryParse(fightersInput, out NumberofFighters) || NumberofFighters < 1)
                 {
-                    Console.WriteLine("Invalid input. Please enter a numeric value for the amount of players and enemies combined (at least 1):");
+                    Console.WriteLine("Invalid input. Please enter a numeric value for the amount of players (at least 1):");
                     fightersInput = Console.ReadLine();
                 }
             }
+
             for (int i = 0; i < NumberofFighters; i++)
             {
                 Console.WriteLine($"Enter the name of fighter {i + 1}:");
@@ -58,20 +55,23 @@ namespace DndFighterSim
                 }
                 PrintFighterInfo(name, initiative);
             }
-            Console.WriteLine($"Number of enemies: {NumberofEnemies}");
-            NumberofEnemies = 0;
+
+            // Read number of enemies
+            int NumberofEnemies = -1;
+            while (NumberofEnemies < 0)
             {
-                Console.WriteLine("Please enter a valid number of fighters (at least 1):");
-                fightersInput = Console.ReadLine();
-                while (!double.TryParse(fightersInput, out NumberofEnemies) || NumberofEnemies < 1)
+                Console.WriteLine("Please enter a valid number of enemies (0 or more):");
+                string enemiesInput = Console.ReadLine();
+                while (!int.TryParse(enemiesInput, out NumberofEnemies) || NumberofEnemies < 0)
                 {
-                    Console.WriteLine("Invalid input. Please enter a numeric value for the amount of players and enemies combined (at least 1):");
-                    fightersInput = Console.ReadLine();
+                    Console.WriteLine("Invalid input. Please enter a numeric value for the number of enemies (0 or more):");
+                    enemiesInput = Console.ReadLine();
                 }
             }
+
             for (int i = 0; i < NumberofEnemies; i++)
             {
-                Console.WriteLine($"Enter the name of fighter {i + 1}:");
+                Console.WriteLine($"Enter the name of enemy {i + 1}:");
                 string name = Console.ReadLine();
                 Console.WriteLine($"Enter the initiative for {name}:");
                 string initiativeInput = Console.ReadLine();
@@ -84,6 +84,19 @@ namespace DndFighterSim
                 PrintFighterInfo(name, initiative);
             }
 
+            int totalEntered = NumberofFighters + NumberofEnemies;
+
+            if (totalEntered == totalExpected)
+            {
+                Console.WriteLine("All fighters and enemies have been entered successfully.");
+            }
+            else
+            {
+                Console.WriteLine("The number of enemies and fighters do not add up correctly.");
+                Console.WriteLine($"Expected: {totalExpected}, Entered: {totalEntered}");
+            }
+
+            Console.ReadKey();
         }
         static void PrintFighterInfo(string name, int initiative)
         {
