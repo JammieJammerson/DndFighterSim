@@ -34,6 +34,7 @@ namespace DndFighterSim
 
             // Read number of fighters (players)
             int NumberofFighters = 0;
+            List<Fighter> combatants = new List<Fighter>();
             while (NumberofFighters < 1)
             {
                 Console.WriteLine("Please enter a valid number of fighters (at least 1):");
@@ -57,7 +58,9 @@ namespace DndFighterSim
                     Console.WriteLine("Invalid input. Please enter a numeric value for the initiative:");
                     initiativeInput = Console.ReadLine();
                 }
-                PrintFighterInfo(name, initiative);
+                // store fighter
+                combatants.Add(new Fighter { Name = name, Initiative = initiative, IsEnemy = false });
+                Console.WriteLine($"Added player: {name} (Init {initiative})");
             }
 
             // Read number of enemies
@@ -85,7 +88,9 @@ namespace DndFighterSim
                     Console.WriteLine("Invalid input. Please enter a numeric value for the initiative:");
                     initiativeInput = Console.ReadLine();
                 }
-                PrintFighterInfo(name, initiative);
+                // store enemy
+                combatants.Add(new Fighter { Name = name, Initiative = initiative, IsEnemy = true });
+                Console.WriteLine($"Added enemy: {name} (Init {initiative})");
             }
 
             int totalEntered = NumberofFighters + NumberofEnemies;
@@ -100,11 +105,71 @@ namespace DndFighterSim
                 Console.WriteLine($"Expected: {totalExpected}, Entered: {totalEntered}");
             }
 
+            // Build turn order based on initiative (descending), enemies after players when tie
+            var turnOrder = combatants.OrderByDescending(f => f.Initiative).ThenBy(f => f.IsEnemy).ToList();
+
+            Console.WriteLine("Press any key to start the turn-based combat...");
             Console.ReadKey();
+
+            var rand = new Random();
+            int round = 1;
+
+            while (combatants.Any(c => c.IsAlive && !c.IsEnemy) && combatants.Any(c => c.IsAlive && c.IsEnemy))
+            {
+                Console.WriteLine($"\n-- Round {round} --");
+
+                foreach (var actor in turnOrder.Where(a => a.IsAlive))
+                {
+                    // stop if one side has no survivors
+                    if (!(combatants.Any(c => c.IsAlive && !c.IsEnemy) && combatants.Any(c => c.IsAlive && c.IsEnemy)))
+                        break;
+
+                    Console.WriteLine($"{actor.Name} ({(actor.IsEnemy ? "Enemy" : "Player")})'s turn. Initiative: {actor.Initiative}");
+                    Console.WriteLine("Press any key to perform action...");
+                    Console.ReadKey();
+
+                    var opponents = combatants.Where(c => c.IsAlive && c.IsEnemy != actor.IsEnemy).ToList();
+                    if (!opponents.Any())
+                        break;
+
+                    var target = opponents[rand.Next(opponents.Count)];
+                    int attackRoll = rand.Next(1, 21);
+                    Console.WriteLine($"{actor.Name} attacks {target.Name} (roll: {attackRoll})");
+                    if (attackRoll >= 11)
+                    {
+                        target.IsAlive = false;
+                        Console.WriteLine($"{target.Name} is defeated!");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{actor.Name} missed.");
+                    }
+                }
+
+                round++;
+            }
+
+            // Outcome
+            if (combatants.Any(c => c.IsAlive && !c.IsEnemy))
+            {
+                Console.WriteLine("Players win!");
+            }
+            else
+            {
+                Console.WriteLine("Enemies win!");
+            }
         }
         static void PrintFighterInfo(string name, int initiative)
         {
             Console.WriteLine($"Fighter: {name}, Initiative: {initiative}");
         }
+    }
+
+    internal class Fighter
+    {
+        public string Name { get; set; }
+        public int Initiative { get; set; }
+        public bool IsEnemy { get; set; }
+        public bool IsAlive { get; set; } = true;
     }
 }
