@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DndFighterSim
 {
@@ -58,9 +59,19 @@ namespace DndFighterSim
                     Console.WriteLine("Invalid input. Please enter a numeric value for the initiative:");
                     initiativeInput = Console.ReadLine();
                 }
-                // store fighter
-                combatants.Add(new Fighter { Name = name, Initiative = initiative, IsEnemy = false });
-                Console.WriteLine($"Added player: {name} (Init {initiative})");
+
+                Console.WriteLine($"Enter the AC for {name}:");
+                string acInput = Console.ReadLine();
+                int AC;
+                while (!int.TryParse(acInput, out AC))
+                {
+                    Console.WriteLine("Invalid input. Please enter a numeric value for the AC:");
+                    acInput = Console.ReadLine();
+                }
+
+                // store fighter (include AC)
+                combatants.Add(new Fighter { Name = name, Initiative = initiative, IsEnemy = false, AC = AC });
+                Console.WriteLine($"Added player: {name} (Init {initiative}) (AC {AC})");
             }
 
             // Read number of enemies
@@ -83,6 +94,16 @@ namespace DndFighterSim
                 Console.WriteLine($"Enter the initiative for {name}:");
                 string initiativeInput = Console.ReadLine();
                 int initiative;
+
+                Console.WriteLine($"Enter the AC for {name}:");
+                string acInput = Console.ReadLine();
+                int AC;
+                while (!int.TryParse(acInput, out AC))
+                {
+                    Console.WriteLine("Invalid input. Please enter a numeric value for the AC:");
+                    acInput = Console.ReadLine();
+                }
+
                 while (!int.TryParse(initiativeInput, out initiative))
                 {
                     Console.WriteLine("Invalid input. Please enter a numeric value for the initiative:");
@@ -159,9 +180,9 @@ namespace DndFighterSim
                 Console.WriteLine("Enemies win!");
             }
         }
-        static void PrintFighterInfo(string name, int initiative)
+        public void Setup()
         {
-            Console.WriteLine($"Fighter: {name}, Initiative: {initiative}");
+
         }
     }
 
@@ -169,6 +190,8 @@ namespace DndFighterSim
     {
         public string Name { get; set; }
         public int Initiative { get; set; }
+        public int MaxHP { get; set; } = 10;
+        public int AC { get; set; } = 10;
         public bool IsEnemy { get; set; }
         public bool IsAlive { get; set; } = true;
     }
