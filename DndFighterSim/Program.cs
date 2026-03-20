@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -10,20 +11,36 @@ namespace DndFighterSim
     internal class Program
     {
         /// <summary>
-        /// 
+        /// Entry point for the DnD fighter simulator console app.
+        /// Reads campaign selection, collects players and enemies, then runs a simple
+        /// initiative-based turn loop until one side is eliminated.
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">Command-line arguments (unused).</param>
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter your Name and the Campaign:");
-            Console.ReadKey();      
-            Console.WriteLine("Full Name:");
-            Console.ReadLine();
-            Console.WriteLine("Campaign:");
-            Console.ReadLine();
+            // Campaign selection (placeholder storage name)
+            string campaign = "DefaultCampaign";
+            Console.WriteLine("Choose based on if you haved use this or not:" +
+                "\n1. Make a new campaign" +
+                "\n2. Use an older one");
+            string choice = Console.ReadLine();
+            if (choice == "1")
+            {
+                StartNewCampaign(campaign);
+            }
+            else if (choice == "2")
+            {
+                Console.WriteLine("Feature not implemented yet. Starting new campaign...");
+                StartNewCampaign(campaign);
+            }
+            else
+            {
+                Console.WriteLine("Try again.");
+            }
+            // Prompt user for combatants
             Console.WriteLine("Give Me The Characters and Inititives:");
 
-            // Read total expected
+            // Read total expected (players + enemies)
             Console.WriteLine("Give the amount of players and the enemies combined:");
             string totalInput = Console.ReadLine();
             int totalExpected;
@@ -47,6 +64,7 @@ namespace DndFighterSim
                 }
             }
 
+            // Collect player names, initiatives and AC
             for (int i = 0; i < NumberofFighters; i++)
             {
                 Console.WriteLine($"Enter the name of fighter {i + 1}:");
@@ -74,6 +92,10 @@ namespace DndFighterSim
                 Console.WriteLine($"Added player: {name} (Init {initiative}) (AC {AC})");
             }
 
+            string filepath = $"{campaign}{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+
+
+
             // Read number of enemies
             int NumberofEnemies = -1;
             while (NumberofEnemies < 0)
@@ -87,6 +109,7 @@ namespace DndFighterSim
                 }
             }
 
+            // Collect enemy names and initiatives
             for (int i = 0; i < NumberofEnemies; i++)
             {
                 Console.WriteLine($"Enter the name of enemy {i + 1}:");
@@ -126,7 +149,8 @@ namespace DndFighterSim
                 Console.WriteLine($"Expected: {totalExpected}, Entered: {totalEntered}");
             }
 
-            // Build turn order based on initiative (descending), enemies after players when tie
+            // Build turn order based on initiative (descending). ThenBy(f.IsEnemy)
+            // keeps players before enemies when initiative ties occur.
             var turnOrder = combatants.OrderByDescending(f => f.Initiative).ThenBy(f => f.IsEnemy).ToList();
 
             Console.WriteLine("Press any key to start the turn-based combat...");
@@ -135,6 +159,7 @@ namespace DndFighterSim
             var rand = new Random();
             int round = 1;
 
+            // Run simple turn-based loop until one side has no living combatants
             while (combatants.Any(c => c.IsAlive && !c.IsEnemy) && combatants.Any(c => c.IsAlive && c.IsEnemy))
             {
                 Console.WriteLine($"\n-- Round {round} --");
@@ -156,7 +181,9 @@ namespace DndFighterSim
                     var target = opponents[rand.Next(opponents.Count)];
                     int attackRoll = rand.Next(1, 21);
                     Console.WriteLine($"{actor.Name} attacks {target.Name} (roll: {attackRoll})");
-                    if (attackRoll >= 11)
+                    // Simple hit resolution: hit if roll >= target AC
+                    // (replace with attack bonus + d20 vs AC for more realism)
+                    if (attackRoll >= target.AC)
                     {
                         target.IsAlive = false;
                         Console.WriteLine($"{target.Name} is defeated!");
@@ -179,6 +206,17 @@ namespace DndFighterSim
             {
                 Console.WriteLine("Enemies win!");
             }
+        }
+
+        private static void StartNewCampaign(string campaign)
+        {
+            // Simple prompt helper to gather campaign info (placeholder)
+            Console.WriteLine("Enter your Name and the Campaign:");
+            Console.ReadKey();
+            Console.WriteLine("Full Name:");
+            Console.ReadLine();
+            Console.WriteLine("Campaign:");
+            Console.ReadLine();
         }
         public void Setup()
         {
