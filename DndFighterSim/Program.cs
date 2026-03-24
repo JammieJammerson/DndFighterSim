@@ -72,6 +72,8 @@ namespace DndFighterSim
                 Console.WriteLine($"Enter the initiative for {name}:");
                 string initiativeInput = Console.ReadLine();
                 int initiative;
+                Console.Writeline($"Enter the race for {name}:")
+                string Dndrace = Console.Readline(); 
                 while (!int.TryParse(initiativeInput, out initiative))
                 {
                     Console.WriteLine("Invalid input. Please enter a numeric value for the initiative:");
@@ -92,7 +94,7 @@ namespace DndFighterSim
                 Console.WriteLine($"Added player: {name} (Init {initiative}) (AC {AC})");
             }
 
-            string filepath = $"{campaign}{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+            string filepath = $"{campaign}.txt";
 
 
 
