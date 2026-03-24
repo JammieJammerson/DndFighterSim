@@ -4,6 +4,8 @@ public abstract class DndRaces
 {
     public abstract Dragonborn()
     {
+		get { return Racename; }
+		set { Racename = value;}
     }
     public abstract Dwarf()
     {
