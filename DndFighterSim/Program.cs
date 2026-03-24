@@ -37,64 +37,17 @@ namespace DndFighterSim
             {
                 Console.WriteLine("Try again.");
             }
-            // Prompt user for combatants
-            Console.WriteLine("Give Me The Characters and Inititives:");
-
-            // Read total expected (players + enemies)
-            Console.WriteLine("Give the amount of players and the enemies combined:");
-            string totalInput = Console.ReadLine();
-            int totalExpected;
-            while (!int.TryParse(totalInput, out totalExpected) || totalExpected < 1)
+            
+            using (StreamWriter sw = new StreamWriter("{campaign}.txt", true))
             {
-                Console.WriteLine("Invalid input. Please enter a positive integer for the amount of players and enemies combined:");
-                totalInput = Console.ReadLine();
-            }
-
-            // Read number of fighters (players)
-            int NumberofFighters = 0;
-            List<Fighter> combatants = new List<Fighter>();
-            while (NumberofFighters < 1)
-            {
-                Console.WriteLine("Please enter a valid number of fighters (at least 1):");
-                string fightersInput = Console.ReadLine();
-                while (!int.TryParse(fightersInput, out NumberofFighters) || NumberofFighters < 1)
+                sw.WriteLine("Hello, {fullname}");
+                sw.WriteLine("This is the party for {campign}.");
+                for (int i = 0; i < NumberofNumberofFighters; i++)
                 {
-                    Console.WriteLine("Invalid input. Please enter a numeric value for the amount of players (at least 1):");
-                    fightersInput = Console.ReadLine();
+                    sw.WriteLine("");
                 }
             }
-
-            // Collect player names, initiatives and AC
-            for (int i = 0; i < NumberofFighters; i++)
-            {
-                Console.WriteLine($"Enter the name of fighter {i + 1}:");
-                string name = Console.ReadLine();
-                Console.WriteLine($"Enter the initiative for {name}:");
-                string initiativeInput = Console.ReadLine();
-                int initiative;
-                Console.Writeline($"Enter the race for {name}:")
-                string Dndrace = Console.Readline(); 
-                while (!int.TryParse(initiativeInput, out initiative))
-                {
-                    Console.WriteLine("Invalid input. Please enter a numeric value for the initiative:");
-                    initiativeInput = Console.ReadLine();
-                }
-
-                Console.WriteLine($"Enter the AC for {name}:");
-                string acInput = Console.ReadLine();
-                int AC;
-                while (!int.TryParse(acInput, out AC))
-                {
-                    Console.WriteLine("Invalid input. Please enter a numeric value for the AC:");
-                    acInput = Console.ReadLine();
-                }
-
-                // store fighter (include AC)
-                combatants.Add(new Fighter { Name = name, Initiative = initiative, IsEnemy = false, AC = AC });
-                Console.WriteLine($"Added player: {name} (Init {initiative}) (AC {AC})");
-            }
-
-            string filepath = $"{campaign}.txt";
+            
 
 
 
@@ -216,9 +169,11 @@ namespace DndFighterSim
             Console.WriteLine("Enter your Name and the Campaign:");
             Console.ReadKey();
             Console.WriteLine("Full Name:");
-            Console.ReadLine();
+            string fullname = Console.ReadLine();
             Console.WriteLine("Campaign:");
-            Console.ReadLine();
+            string campaign = Console.ReadLine();
+            return fullname;
+            return campaign;
         }
         public static void ContinuingCampaign(string campaign)
         {
@@ -229,7 +184,62 @@ namespace DndFighterSim
         }
         public void Setup()
         {
+            // Prompt user for combatants
+            Console.WriteLine("Give Me The Characters and Inititives:");
 
+            // Read total expected (players + enemies)
+            Console.WriteLine("Give the amount of players and the enemies combined:");
+            string totalInput = Console.ReadLine();
+            int totalExpected;
+            while (!int.TryParse(totalInput, out totalExpected) || totalExpected < 1)
+            {
+                Console.WriteLine("Invalid input. Please enter a positive integer for the amount of players and enemies combined:");
+                totalInput = Console.ReadLine();
+            }
+
+            // Read number of fighters (players)
+            int NumberofFighters = 0;
+            List<Fighter> combatants = new List<Fighter>();
+            while (NumberofFighters < 1)
+            {
+                Console.WriteLine("Please enter a valid number of fighters (at least 1):");
+                string fightersInput = Console.ReadLine();
+                while (!int.TryParse(fightersInput, out NumberofFighters) || NumberofFighters < 1)
+                {
+                    Console.WriteLine("Invalid input. Please enter a numeric value for the amount of players (at least 1):");
+                    fightersInput = Console.ReadLine();
+                }
+            }
+
+            // Collect player names, initiatives and AC
+            for (int i = 0; i < NumberofFighters; i++)
+            {
+                Console.WriteLine($"Enter the name of fighter {i + 1}:");
+                string name = Console.ReadLine();
+                Console.WriteLine($"Enter the initiative for {name}:");
+                string initiativeInput = Console.ReadLine();
+                int initiative;
+                Console.Writeline($"Enter the race for {name}:")
+                string Dndrace = Console.Readline(); 
+                while (!int.TryParse(initiativeInput, out initiative))
+                {
+                    Console.WriteLine("Invalid input. Please enter a numeric value for the initiative:");
+                    initiativeInput = Console.ReadLine();
+                }
+
+                Console.WriteLine($"Enter the AC for {name}:");
+                string acInput = Console.ReadLine();
+                int AC;
+                while (!int.TryParse(acInput, out AC))
+                {
+                    Console.WriteLine("Invalid input. Please enter a numeric value for the AC:");
+                    acInput = Console.ReadLine();
+                }
+
+                // store fighter (include AC)
+                combatants.Add(new Fighter { Name = name, Initiative = initiative, IsEnemy = false, AC = AC });
+                Console.WriteLine($"Added player: {name} (Init {initiative}) (AC {AC})");
+            }
         }
     }
 
@@ -239,6 +249,7 @@ namespace DndFighterSim
         public int Initiative { get; set; }
         public int MaxHP { get; set; } = 10;
         public int AC { get; set; } = 10;
+        public string Playerclass { get; set;}
         public bool IsEnemy { get; set; }
         public bool IsAlive { get; set; } = true;
     }
