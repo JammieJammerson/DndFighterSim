@@ -18,7 +18,7 @@ namespace DndFighterSim
         /// <param name="args">Command-line arguments (unused).</param>
         static void Main(string[] args)
         {
-            // Campaign selection (placeholder storage name)
+            // Campaign selection
             string campaign = "DefaultCampaign";
             Console.WriteLine("Choose based on if you haved use this or not:" +
                 "\n1. Make a new campaign" +
@@ -26,7 +26,7 @@ namespace DndFighterSim
             string choice = Console.ReadLine();
             if (choice == "1")
             {
-                StartNewCampaign(campaign);
+                ContinuingCampaign(campaign);
             }
             else if (choice == "2")
             {
@@ -210,7 +210,7 @@ namespace DndFighterSim
             }
         }
 
-        private static void StartNewCampaign(string campaign)
+        public static void StartNewCampaign(string campaign)
         {
             // Simple prompt helper to gather campaign info (placeholder)
             Console.WriteLine("Enter your Name and the Campaign:");
@@ -219,6 +219,13 @@ namespace DndFighterSim
             Console.ReadLine();
             Console.WriteLine("Campaign:");
             Console.ReadLine();
+        }
+        public static void ContinuingCampaign(string campaign)
+        {
+            //Simple selection for campaign
+            Console.WriteLine("Enter the Name for your Campaign:")
+            Console.Readline();
+            
         }
         public void Setup()
         {
